@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="utf-8">
+
+
+    <title>Produtos</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="/produtos/static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="/produtos/static/css/custom.css" rel="stylesheet">
+    <link href="/produtos/static/vendor/datatables/dataTables.select.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800">Produtos</h1>
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-body">
+                            <button type="button" class="btn btn-primary" style="width:150px" data-toggle="modal" data-target="#modalAdd">Adicionar</button>
+                            <button type="button" class="btn btn-primary" style="width:150px" onclick="edita()">Editar</button>
+                            <button type="button" class="btn btn-primary" style="width:150px" onclick="exclui()">Excluir</button>
+                            <hr />
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="tableProduto" width="100%!important" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>Categoria</th>
+                                            <th>Preço (R$)</th>
+                                            <th>Quantidade</th>
+                                            <th>Lote</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!--Modal ADD-->
+    <div class="modal fade" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="modalAddLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalAddLabel">Novo Produto</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="form-group">
+                  <label for="addProdutoNome" class="col-form-label">Nome</label>
+                  <input type="text" class="form-control" style="width:100%" id="addProdutoNome">
+                </div>
+                <div class="form-group">
+                  <label for="addProdutoCategoria" class="col-form-label">Categoria</label>
+                  <input type="text" class="form-control" style="width:100%" id="addProdutoCategoria">
+                </div>
+                <div class="form-group">
+                    <label for="addProdutoPreco" class="col-form-label">Preço (R$)</label>
+                    <input type="text" class="form-control" style="width:100%" id="addProdutoPreco">
+                  </div>
+                  <div class="form-group">
+                    <label for="addProdutoQuantidade" class="col-form-label">Quantidade</label>
+                    <input type="text" class="form-control" style="width:100%" id="addProdutoQuantidade">
+                  </div>
+                  <div class="form-group">
+                    <label for="addProdutoLote" class="col-form-label">Lote</label>
+                    <input type="text" class="form-control" style="width:100%" id="addProdutoLote">
+                  </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" onclick="fecharModalAdd()">Cancelar</button>
+              <button type="button" class="btn btn-primary" onclick="addProduto()">Salvar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    <!--Modal EXCLUI-->
+    <div class="modal fade" id="modalExclui" tabindex="-1" role="dialog" aria-labelledby="modalExcluiLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalExcluiLabel">Excluir</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <h2>Confirma a exclusão do produto?</h2>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" onclick="fecharModalExclui()">Cancelar</button>
+              <button type="button" class="btn btn-primary" onclick="confirmaExclui()">Confirmar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!--Modal EDITA-->
+      <div class="modal fade" id="modalEdita" tabindex="-1" role="dialog" aria-labelledby="modalEditaLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalEditaLabel">Editar Produto</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="form-group">
+                  <label for="editaProdutoNome" class="col-form-label">Nome</label>
+                  <input type="text" class="form-control" style="width:100%" id="editaProdutoNome">
+                </div>
+                <div class="form-group">
+                  <label for="editaProdutoCategoria" class="col-form-label">Categoria</label>
+                  <input type="text" class="form-control" style="width:100%" id="editaProdutoCategoria">
+                </div>
+                <div class="form-group">
+                    <label for="editaProdutoPreco" class="col-form-label">Preço (R$)</label>
+                    <input type="text" class="form-control" style="width:100%" id="editaProdutoPreco">
+                  </div>
+                  <div class="form-group">
+                    <label for="editaProdutoQuantidade" class="col-form-label">Quantidade</label>
+                    <input type="text" class="form-control" style="width:100%" id="editaProdutoQuantidade">
+                  </div>
+                  <div class="form-group">
+                    <label for="editaProdutoLote" class="col-form-label">Lote</label>
+                    <input type="text" class="form-control" style="width:100%" id="editaProdutoLote">
+                  </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" onclick="fecharModalEdita()">Cancelar</button>
+              <button type="button" class="btn btn-primary" onclick="salvaEdita()">Salvar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!--Toast selecionar uma linha ao menos-->
+      <div style='text-align: center; margin-left: 40%; position:absolute; top: 15%; ' id='alertSelecionarLinhas' role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="true">
+        <div class="toast-body" style="background-color: red; color: white;">
+          Erro! Selecione ao menos uma linha da tabela.
+        </div>
+      </div>
+
+
+      <!--Toast sucesso-->
+      <div style='text-align: center; margin-left: 40%; position:absolute; top: 15%;' id='alertSucesso' role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="true">
+        <div class="toast-body" style="background-color: green; color: white;">
+          Operação realiazada com sucesso!
+        </div>
+      </div>
+
+
+      <!--Toast erro-->
+      <div style='text-align: center; margin-left: 40%; position:absolute; top: 15%;' id='alertErro' role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="true">
+        <div class="toast-body" style="background-color: red; color: white;">
+          Ocorreu um erro, contate o administrador do sistema!
+        </div>
+      </div>
+    
+    <!-- Bootstrap core JavaScript-->
+    <script src="/produtos/static/vendor/jquery/jquery.min.js"></script>
+    <script src="/produtos/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="/produtos/static/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="/produtos/static/js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="/produtos/static/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/produtos/static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="/produtos/static/js/demo/datatables-demo.js"></script>
+    <script src="/produtos/static/vendor/datatables/dataTables.select.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var tabelaProdutos = createTabelaProdutos();
+
+        })
+    </script>
+
+    <script>
+        function createTabelaProdutos(){
+            let tabProdutos = $("#tableProduto").DataTable({
+                "ajax":{
+                    url: `http://localhost:5000/produtos/v1.0/produto/produtos`,
+                    dataSrc: 'payload',
+                    datatype: "JSON",
+                    data:{
+                        'search': function(){
+                            return $("#searchEstoque").val()
+                        }
+                    }
+                },
+                "paging": true,
+                "info": false,
+                "autowidth": true,
+                "dom": 'lBfrtip',
+                'select': {
+            'style':    'single',
+            'classname': 'dt-selected'
+        },
+                "columns":[
+                    {
+                        "data": "nome",
+                        "width": 600,
+                        "className": "text-center",
+                        "orderable": true,
+                    },
+                    {
+                        "data": "categoria",
+                        "width": 300,
+                        "className": "text-center",
+                        "orderable": true,
+                    },
+                    {
+                        "data": "preco",
+                        "width": 300,
+                        "className": "text-center",
+                        "orderable": true,
+                    },
+                    {
+                        "data": "quantidade",
+                        "width": 200,
+                        "className": "text-center",
+                        "orderable": true,
+                    },
+                    {
+                        "data": "lote",
+                        "width": 300,
+                        "className": "text-center",
+                        "orderable": true,
+                    }],
+                initComplete: function (data){
+                    tabProdutos.on('select', function (e, dt, type, indexes){
+                        if (type == 'row') {
+                            tabProdutos.columns({ selected : true}).deselect();
+                        }
+                        if (type == 'column'){
+                            tabProdutos.rows({ selected: true}).deselect();
+                        }
+                    })
+
+                    tabProdutos.on('deselect', function (e, dt, type, indexes){
+                        if (type == 'row') {
+                            
+                        }
+                        if (type == 'column'){
+                            
+                        }
+                    })
+                }
+
+            });
+            return tabProdutos
+        }    
+    </script>
+
+    <script>
+        function fecharModalAdd(){
+            $('#addProdutoNome').val(null)
+            $('#addProdutoCategoria').val(null)
+            $('#addProdutoPreco').val(null)
+            $('#addProdutoQuantidade').val(null)
+            $('#addProdutoLote').val(null)
+            $('#modalAdd').modal('hide')
+        }
+    </script>
+
+    <script>
+        function fecharModalExclui(){
+            $('#modalExclui').modal('hide')
+        }
+    </script>
+
+    <script>
+        function fecharModalEdita(){
+            $('#editaProdutoNome').val(null)
+            $('#editaProdutoCategoria').val(null)
+            $('#editaProdutoPreco').val(null)
+            $('#editaProdutoQuantidade').val(null)
+            $('#editaProdutoLote').val(null)
+            $('#modalEdita').modal('hide')
+        }
+    </script>
+
+    <script>
+        function edita(){
+            let selectedRows;
+            selectedRows = $('#tableProduto').DataTable().rows({selected: true}).data();
+
+            if(selectedRows.length > 0){
+                id = selectedRows[0].id
+                
+                $.ajax({
+                type: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    'Authorization': 'Penaro',
+                    'Accept': 'application/json'
+                },
+                url: `http://localhost:5000/produtos/v1.0/produto/produtos/${id}`,
+                success: function(response){
+                    if(response['codigo'] == 200){
+                        $('#modalEdita').modal('show')  
+                        payload = response['payload']                   
+                        $('#editaProdutoNome').val(payload['nome'])
+                        $('#editaProdutoCategoria').val(payload['categoria'])
+                        $('#editaProdutoPreco').val(payload['preco'])
+                        $('#editaProdutoQuantidade').val(payload['quantidade'])
+                        $('#editaProdutoLote').val(payload['lote'])
+                    } else {
+                        $('#alertErro').toast('show')
+                    }
+                }
+            })
+
+            } else {
+                $('#alertSelecionarLinhas').toast('show')
+            }
+        }
+    </script>
+
+    <script>
+        function exclui(){
+            let selectedRows;
+            selectedRows = $('#tableProduto').DataTable().rows({selected: true}).data();
+
+            if(selectedRows.length > 0){              
+                $('#modalExclui').modal('show')  
+
+            } else {
+                $('#alertSelecionarLinhas').toast('show')
+            }
+        }
+    </script>
+
+    <script>
+        function confirmaExclui(){
+            let selectedRows;
+            selectedRows = $('#tableProduto').DataTable().rows({selected: true}).data();
+            id = selectedRows[0].id
+                
+            $.ajax({
+            type: 'DELETE',
+            dataType: 'JSON',
+            headers: {
+                'Authorization': 'Penaro',
+                'Accept': 'application/json'
+            },
+            url: `http://localhost:5000/produtos/v1.0/produto/delete-produto/${id}`,
+            success: function(response){
+                if(response['codigo'] == 200){
+                    $('#alertSucesso').toast('show')
+                    fecharModalExclui()
+                    $('#tableProduto').DataTable().ajax.reload()
+                } else {
+                    $('#alertErro').toast('show')
+                }
+            }
+            })
+        }
+    </script>
+
+    <script>
+        function addProduto(){               
+            let nome = $('#addProdutoNome').val()
+            let categoria = $('#addProdutoCategoria').val()
+            let preco = $('#addProdutoPreco').val()
+            let quantidade = $('#addProdutoQuantidade').val()
+            let lote = $('#addProdutoLote').val()
+
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                headers: {
+                    'Authorization': 'Penaro',
+                    'Accept': 'application/json'
+                },
+                url: `http://localhost:5000/produtos/v1.0/produto/adiciona-produto`,
+                data: {
+                    nome : nome,
+                    categoria : categoria,
+                    preco : preco,
+                    quantidade : quantidade,
+                    lote : lote,
+                },
+                success: function(response){
+                    if(response['codigo'] == 200){                       
+                        fecharModalAdd()                        
+                        $('#tableProduto').DataTable().ajax.reload()
+                        $('#alertSucesso').toast('show')
+                    } else {
+                        $('#alertErro').toast('show')
+                    }
+                }
+            })
+            
+        }
+    </script>
+
+    <script>
+        function salvaEdita(){              
+            let selectedRows;
+            selectedRows = $('#tableProduto').DataTable().rows({selected: true}).data(); 
+            let nome = $('#editaProdutoNome').val()
+            let categoria = $('#editaProdutoCategoria').val()
+            let preco = $('#editaProdutoPreco').val()
+            let quantidade = $('#editaProdutoQuantidade').val()
+            let lote = $('#editaProdutoLote').val()
+            id = selectedRows[0].id
+
+            $.ajax({
+                type: 'PUT',
+                dataType: 'JSON',
+                headers: {
+                    'Authorization': 'Penaro',
+                    'Accept': 'application/json'
+                },
+                url: `http://localhost:5000/produtos/v1.0/produto/edita-produto/${id}`,
+                data: {
+                    nome : nome,
+                    categoria : categoria,
+                    preco : preco,
+                    quantidade : quantidade,
+                    lote : lote,
+                },
+                success: function(response){
+                    if(response['codigo'] == 200){                       
+                        fecharModalEdita()                        
+                        $('#tableProduto').DataTable().ajax.reload()
+                        $('#alertSucesso').toast('show')
+                    } else {
+                        $('#alertErro').toast('show')
+                    }
+                }
+            })
+            
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="utf-8">
+
+
+    <title>Livros</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="/livros/static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="/livros/static/css/custom.css" rel="stylesheet">
+    <link href="/livros/static/vendor/datatables/dataTables.select.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800">Livros</h1>
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-body">
+                            <button type="button" class="btn btn-primary" style="width:150px" data-toggle="modal" data-target="#modalAdd">Adicionar</button>
+                            <button type="button" class="btn btn-primary" style="width:150px" onclick="edita()">Editar</button>
+                            <button type="button" class="btn btn-primary" style="width:150px" onclick="exclui()">Excluir</button>
+                            <hr />
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="tableLivro" width="100%!important" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>Autor</th>
+                                            <th>Gênero</th>
+                                            <th>Ano</th>
+                                            <th>Código</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!--Modal ADD-->
+    <div class="modal fade" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="modalAddLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalAddLabel">Novo Livro</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="form-group">
+                  <label for="addLivroNome" class="col-form-label">Nome:</label>
+                  <input type="text" class="form-control" style="width:100%" id="addLivroNome">
+                </div>
+                <div class="form-group">
+                  <label for="addLivroAutor" class="col-form-label">Autor</label>
+                  <input type="text" class="form-control" style="width:100%" id="addLivroAutor">
+                </div>
+                <div class="form-group">
+                    <label for="addLivroGenero" class="col-form-label">Gênero</label>
+                    <input type="text" class="form-control" style="width:100%" id="addLivroGenero">
+                  </div>
+                  <div class="form-group">
+                    <label for="addLivroAno" class="col-form-label">Ano</label>
+                    <input type="text" class="form-control" style="width:100%" id="addLivroAno">
+                  </div>
+                  <div class="form-group">
+                    <label for="addLivroCodigo" class="col-form-label">Código</label>
+                    <input type="text" class="form-control" style="width:100%" id="addLivroCodigo">
+                  </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" onclick="fecharModalAdd()">Cancelar</button>
+              <button type="button" class="btn btn-primary" onclick="addLivro()">Salvar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    <!--Modal EXCLUI-->
+    <div class="modal fade" id="modalExclui" tabindex="-1" role="dialog" aria-labelledby="modalExcluiLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalExcluiLabel">Excluir</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <h2>Confirma a exclusão do livro?</h2>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" onclick="fecharModalExclui()">Cancelar</button>
+              <button type="button" class="btn btn-primary" onclick="confirmaExclui()">Confirmar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!--Modal EDITA-->
+      <div class="modal fade" id="modalEdita" tabindex="-1" role="dialog" aria-labelledby="modalEditaLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalEditaLabel">Editar Livro</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="form-group">
+                  <label for="editaLivroNome" class="col-form-label">Nome:</label>
+                  <input type="text" class="form-control" style="width:100%" id="editaLivroNome">
+                </div>
+                <div class="form-group">
+                  <label for="editaLivroAutor" class="col-form-label">Autor</label>
+                  <input type="text" class="form-control" style="width:100%" id="editaLivroAutor">
+                </div>
+                <div class="form-group">
+                    <label for="editaLivroGenero" class="col-form-label">Gênero</label>
+                    <input type="text" class="form-control" style="width:100%" id="editaLivroGenero">
+                  </div>
+                  <div class="form-group">
+                    <label for="editaLivroAno" class="col-form-label">Ano</label>
+                    <input type="text" class="form-control" style="width:100%" id="editaLivroAno">
+                  </div>
+                  <div class="form-group">
+                    <label for="editaLivroCodigo" class="col-form-label">Código</label>
+                    <input type="text" class="form-control" style="width:100%" id="editaLivroCodigo">
+                  </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" onclick="fecharModalEdita()">Cancelar</button>
+              <button type="button" class="btn btn-primary" onclick="salvaEdita()">Salvar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!--Toast selecionar uma linha ao menos-->
+      <div style='text-align: center; margin-left: 40%; position:absolute; top: 15%; ' id='alertSelecionarLinhas' role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="true">
+        <div class="toast-body" style="background-color: red; color: white;">
+          Erro! Selecione ao menos uma linha da tabela.
+        </div>
+      </div>
+
+
+      <!--Toast sucesso-->
+      <div style='text-align: center; margin-left: 40%; position:absolute; top: 15%;' id='alertSucesso' role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="true">
+        <div class="toast-body" style="background-color: green; color: white;">
+          Operação realiazada com sucesso!
+        </div>
+      </div>
+
+
+      <!--Toast erro-->
+      <div style='text-align: center; margin-left: 40%; position:absolute; top: 15%;' id='alertErro' role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="true">
+        <div class="toast-body" style="background-color: red; color: white;">
+          Ocorreu um erro, contate o administrador do sistema!
+        </div>
+      </div>
+    
+    <!-- Bootstrap core JavaScript-->
+    <script src="/livros/static/vendor/jquery/jquery.min.js"></script>
+    <script src="/livros/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="/livros/static/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="/livros/static/js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="/livros/static/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/livros/static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="/livros/static/js/demo/datatables-demo.js"></script>
+    <script src="/livros/static/vendor/datatables/dataTables.select.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var tabelaLivros = createTabelaLivros();
+
+        })
+    </script>
+
+    <script>
+        function createTabelaLivros(){
+            let tabLivros = $("#tableLivro").DataTable({
+                "ajax":{
+                    url: `http://localhost:5000/livros/v1.0/livro/livros`,
+                    dataSrc: 'payload',
+                    datatype: "JSON",
+                    data:{
+                        'search': function(){
+                            return $("#searchEstoque").val()
+                        }
+                    }
+                },
+                "paging": true,
+                "info": false,
+                "autowidth": true,
+                "dom": 'lBfrtip',
+                'select': {
+            'style':    'single',
+            'classname': 'dt-selected'
+        },
+                "columns":[
+                    {
+                        "data": "nome",
+                        "width": 600,
+                        "className": "text-center",
+                        "orderable": true,
+                    },
+                    {
+                        "data": "autor",
+                        "width": 300,
+                        "className": "text-center",
+                        "orderable": true,
+                    },
+                    {
+                        "data": "genero",
+                        "width": 300,
+                        "className": "text-center",
+                        "orderable": true,
+                    },
+                    {
+                        "data": "ano",
+                        "width": 200,
+                        "className": "text-center",
+                        "orderable": true,
+                    },
+                    {
+                        "data": "codigo",
+                        "width": 300,
+                        "className": "text-center",
+                        "orderable": true,
+                    }],
+                initComplete: function (data){
+                    tabLivros.on('select', function (e, dt, type, indexes){
+                        if (type == 'row') {
+                            tabLivros.columns({ selected : true}).deselect();
+                        }
+                        if (type == 'column'){
+                            tabLivros.rows({ selected: true}).deselect();
+                        }
+                    })
+
+                    tabLivros.on('deselect', function (e, dt, type, indexes){
+                        if (type == 'row') {
+                            
+                        }
+                        if (type == 'column'){
+                            
+                        }
+                    })
+                }
+
+            });
+            return tabLivros
+        }    
+    </script>
+
+    <script>
+        function fecharModalAdd(){
+            $('#addLivroNome').val(null)
+            $('#addLivroAutor').val(null)
+            $('#addLivroGenero').val(null)
+            $('#addLivroAno').val(null)
+            $('#addLivroCodigo').val(null)
+            $('#modalAdd').modal('hide')
+        }
+    </script>
+
+    <script>
+        function fecharModalExclui(){
+            $('#modalExclui').modal('hide')
+        }
+    </script>
+
+    <script>
+        function fecharModalEdita(){
+            $('#editaLivroNome').val(null)
+            $('#editaLivroAutor').val(null)
+            $('#editaLivroGenero').val(null)
+            $('#editaLivroAno').val(null)
+            $('#editaLivroCodigo').val(null)
+            $('#modalEdita').modal('hide')
+        }
+    </script>
+
+    <script>
+        function edita(){
+            let selectedRows;
+            selectedRows = $('#tableLivro').DataTable().rows({selected: true}).data();
+
+            if(selectedRows.length > 0){
+                id = selectedRows[0].id
+                
+                $.ajax({
+                type: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    'Authorization': 'Penaro',
+                    'Accept': 'application/json'
+                },
+                url: `http://localhost:5000/livros/v1.0/livro/livros/${id}`,
+                success: function(response){
+                    if(response['codigo'] == 200){
+                        $('#modalEdita').modal('show')  
+                        payload = response['payload']                   
+                        $('#editaLivroNome').val(payload['nome'])
+                        $('#editaLivroAutor').val(payload['autor'])
+                        $('#editaLivroGenero').val(payload['genero'])
+                        $('#editaLivroAno').val(payload['ano'])
+                        $('#editaLivroCodigo').val(payload['codigo'])
+                    } else {
+                        $('#alertErro').toast('show')
+                    }
+                }
+            })
+
+            } else {
+                $('#alertSelecionarLinhas').toast('show')
+            }
+        }
+    </script>
+
+    <script>
+        function exclui(){
+            let selectedRows;
+            selectedRows = $('#tableLivro').DataTable().rows({selected: true}).data();
+
+            if(selectedRows.length > 0){              
+                $('#modalExclui').modal('show')  
+
+            } else {
+                $('#alertSelecionarLinhas').toast('show')
+            }
+        }
+    </script>
+
+    <script>
+        function confirmaExclui(){
+            let selectedRows;
+            selectedRows = $('#tableLivro').DataTable().rows({selected: true}).data();
+            id = selectedRows[0].id
+                
+            $.ajax({
+            type: 'DELETE',
+            dataType: 'JSON',
+            headers: {
+                'Authorization': 'Penaro',
+                'Accept': 'application/json'
+            },
+            url: `http://localhost:5000/livros/v1.0/livro/delete-livro/${id}`,
+            success: function(response){
+                if(response['codigo'] == 200){
+                    $('#alertSucesso').toast('show')
+                    fecharModalExclui()
+                    $('#tableLivro').DataTable().ajax.reload()
+                } else {
+                    $('#alertErro').toast('show')
+                }
+            }
+            })
+        }
+    </script>
+
+    <script>
+        function addLivro(){               
+            let nome = $('#addLivroNome').val()
+            let autor = $('#addLivroAutor').val()
+            let genero = $('#addLivroGenero').val()
+            let ano = $('#addLivroAno').val()
+            let codigo = $('#addLivroCodigo').val()
+
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                headers: {
+                    'Authorization': 'Penaro',
+                    'Accept': 'application/json'
+                },
+                url: `http://localhost:5000/livros/v1.0/livro/adiciona-livro`,
+                data: {
+                    nome : nome,
+                    autor : autor,
+                    genero : genero,
+                    ano : ano,
+                    codigo : codigo,
+                },
+                success: function(response){
+                    if(response['codigo'] == 200){                       
+                        fecharModalAdd()                        
+                        $('#tableLivro').DataTable().ajax.reload()
+                        $('#alertSucesso').toast('show')
+                    } else {
+                        $('#alertErro').toast('show')
+                    }
+                }
+            })
+            
+        }
+    </script>
+
+    <script>
+        function salvaEdita(){              
+            let selectedRows;
+            selectedRows = $('#tableLivro').DataTable().rows({selected: true}).data(); 
+            let nome = $('#editaLivroNome').val()
+            let autor = $('#editaLivroAutor').val()
+            let genero = $('#editaLivroGenero').val()
+            let ano = $('#editaLivroAno').val()
+            let codigo = $('#editaLivroCodigo').val()
+            id = selectedRows[0].id
+
+            $.ajax({
+                type: 'PUT',
+                dataType: 'JSON',
+                headers: {
+                    'Authorization': 'Penaro',
+                    'Accept': 'application/json'
+                },
+                url: `http://localhost:5000/livros/v1.0/livro/edita-livro/${id}`,
+                data: {
+                    nome : nome,
+                    autor : autor,
+                    genero : genero,
+                    ano : ano,
+                    codigo : codigo,
+                },
+                success: function(response){
+                    if(response['codigo'] == 200){                       
+                        fecharModalEdita()                        
+                        $('#tableLivro').DataTable().ajax.reload()
+                        $('#alertSucesso').toast('show')
+                    } else {
+                        $('#alertErro').toast('show')
+                    }
+                }
+            })
+            
+        }
+    </script>
+</body>
+
+</html>
